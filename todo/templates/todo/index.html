@@ -1,0 +1,36 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>To-Do List</title>
+    <link href='https://fonts.googleapis.com/css?family=Advent Pro' rel='stylesheet'>
+    <link href="{% static 'todo/my.css' %}" rel="stylesheet">
+</head>
+<body>
+<h1>To-Do List</h1>
+<hr>
+<form action="{% url 'add' %}" method="POST">
+    {% csrf_token %}
+    {{ form.text }}
+    <input type="submit" value="Add">
+    <input type=button onClick="parent.location='{% url 'deleteall' %}'" value='Delete All'>
+</form>
+<br>
+<table>
+    {% for item in todoList %}
+        {% if item.completed %}
+        <tr class="completed">
+            <td style="width: 600px; text-decoration: line-through;"><a href="{% url 'uncheck' item.id %}">{{ item.text }}</a></td>
+            <td class="deletebutton"><a href="{% url 'delete' item.id %}">Delete</a></td>
+        </tr>
+        {% else %}
+        <tr class="notcompleted">
+            <td style="width: 600px;"><a href="{% url 'checkoff' item.id %}">{{ item.text }}</a></td>
+            <td class="deletebutton"><a href="{% url 'delete' item.id %}">Delete</a></td>
+        </tr>
+        {% endif %}
+    {% endfor %}
+</table>
+</body>
+</html>
